@@ -10,6 +10,7 @@ const PriceChart = (props) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
+        console.log(props.selectedCoin);
         if(props.data){
             setData(props.data);
         }
@@ -18,9 +19,7 @@ const PriceChart = (props) => {
             const vs_currency = 'usd';
             const from = now - (7 * 24 * 60 * 60);
             const to = now;
-            const url = `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=${vs_currency}&from=${from}&to=${to}`;
-            console.log(new Date(from)); // Logs the date 7 days ago
-            console.log(new Date(to)); // Logs the current date
+            const url = `https://api.coingecko.com/api/v3/coins/${props.selectedCoin.toLowerCase()}/market_chart/range?vs_currency=${vs_currency}&from=${from}&to=${to}`;
             axios.get(url, {}).then((response) => {
                 if(response.status === 200){
                     setData(response.data.prices);
@@ -29,23 +28,21 @@ const PriceChart = (props) => {
 
             });
         }
-    }, [props.coin]);
+    }, [props.selectedCoin]);
 
     useEffect(() => {
         const ctx = chartRef.current.getContext('2d');
 
-        // Destroy the previous chart instance if it exists
         if (chartInstanceRef.current) {
             chartInstanceRef.current.destroy();
         }
 
-        // Create a new chart instance
         chartInstanceRef.current = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: data.map(item => new Date(item[0])),
                 datasets: [{
-                    label: 'Price',
+                    label: `${props.selectedCoin} Price`,
                     data: data.map(item => item[1]),
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -67,7 +64,6 @@ const PriceChart = (props) => {
             }
         });
 
-        // Cleanup function to destroy the chart when the component unmounts
         return () => {
             if (chartInstanceRef.current) {
                 chartInstanceRef.current.destroy();

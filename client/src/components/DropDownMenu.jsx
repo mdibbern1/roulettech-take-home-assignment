@@ -18,7 +18,7 @@ const DropdownMenu = (props) => {
                 <ul className="dropdown-menu">
                     {props.dropDownItems.map((coin, index) => {
                         if(coin !== selectedCoin){
-                            return <li key={index} onClick={() => { setSelectedCoin(coin); toggleMenu() }} ><a>{coin}</a></li>
+                            return <li key={index} onClick={() => { props.handleSelectedCoin(coin); setSelectedCoin(coin); toggleMenu() }} ><a>{coin}</a></li>
                         }
                     })}
                 </ul>
