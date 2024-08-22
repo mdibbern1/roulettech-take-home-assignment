@@ -31,16 +31,6 @@ const PriceChart = (props) => {
         }
     }, [props.coin]);
 
-    const dummyData = [
-        { date: '2023-01-01', price: 100 },
-        { date: '2023-01-02', price: 105 },
-        { date: '2023-01-03', price: 102 },
-        { date: '2023-01-04', price: 110 },
-        { date: '2023-01-05', price: 108 },
-        { date: '2023-01-06', price: 115 },
-        { date: '2023-01-07', price: 120 },
-    ];
-
     useEffect(() => {
         const ctx = chartRef.current.getContext('2d');
 
