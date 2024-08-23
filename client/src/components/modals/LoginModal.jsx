@@ -15,8 +15,8 @@ const LoginModal = (props) => {
             password: event.target.password.value
         }).then((response) => {
             props.handleUserLogin(response.data.user);
+            props.handleSetUserLoggIn()
             toggleModal();
-            console.log(response.data.user);
         }).catch((error) => {
             console.log(error);
         })

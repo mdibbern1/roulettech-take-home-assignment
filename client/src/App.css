@@ -75,6 +75,7 @@ body {
 
 .content {
   text-align: center;
+  min-width: 90%;
 }
 
 .modal-overlay {

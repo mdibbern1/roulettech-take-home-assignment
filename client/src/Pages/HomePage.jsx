@@ -35,8 +35,7 @@ const HomePage = (props) => {
                 )}
                 {user && (
                     <Fragment>
-                        <p>Track your cryptocurrency investments with ease. Below you can cycle between different cryptocurrencies and see what there daily prices have been for the past week to gain insights on the overall state of the crypto market.</p>
-                        <p>Once you sign in, that graph will be replaced with one that is tracking your crypto portfolio! You can cycle between the different cryptocurrencies you own and see how that coin has performed in the past week</p>
+                        <p>This is your crypto portfolio! Here you can see the value of your crpytocurrency! You can select your different coins from the drop down menu and the graph will update so you can see the value of the newly selected coin!</p>
                         <DropdownMenu handleSelectedCoin={handleSelectedCoin} dropDownItems={user.list_of_coins.map(coin => coin.name)} />
                         <PortfolioChart userCoins={user.list_of_coins} selectedCoin={selectedCoin} />
                     </Fragment>
