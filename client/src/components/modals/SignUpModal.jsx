@@ -38,7 +38,6 @@ const SignUpModal = (props) => {
 
     const handleSignUp = async (event) => {
         event.preventDefault();
-        console.log(selectedItems);
         axios.post('http://127.0.0.1:8000/users/register', {
             email: event.target.email.value,
             password: event.target.password.value,
