@@ -59,6 +59,10 @@ const SignUpModal = (props) => {
                 return;
             }
         }
+        if(!event.target.email.value || !event.target.password.value){
+            alert('Please enter an email and password');
+            return;
+        }
         axios.post('http://127.0.0.1:8000/users/register', {
             email: event.target.email.value,
             password: event.target.password.value,
