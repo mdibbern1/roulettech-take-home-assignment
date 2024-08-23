@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function LoginModal() {
+const LoginModal = (props) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleModal = () => {
-    setIsOpen(!isOpen);
+        setIsOpen(!isOpen);
     }
 
     const handleLogIn = (event) => {
@@ -14,7 +14,9 @@ function LoginModal() {
             email: event.target.email.value,
             password: event.target.password.value
         }).then((response) => {
-            console.log(response.data)
+            props.handleUserLogin(response.data.user);
+            toggleModal();
+            console.log(response.data.user);
         }).catch((error) => {
             console.log(error);
         })

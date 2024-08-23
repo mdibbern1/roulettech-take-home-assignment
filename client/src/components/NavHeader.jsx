@@ -8,7 +8,7 @@ const NavHeader = (props) => {
             <h3 className="navbar-title">Cryptocurrency Portfolio Tracker</h3>
             <ul className='nav-links' >
                 <li>
-                    <LoginModal />
+                    <LoginModal handleUserLogin={props.handleUserLogin} />
                 </li>
                 <li>
                     <SignUpModal />

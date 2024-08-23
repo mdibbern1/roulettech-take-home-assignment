@@ -6,10 +6,16 @@ import { useState } from 'react';
 
 function App() {
 
+  const [user, setUser] = useState(null);
+
+  const handleUserLogin = (user) => {
+    setUser(user);
+  }
+
   return (
     <div className="dark-mode">
-      <NavHeader />
-      <HomePage />
+      <NavHeader handleUserLogin={handleUserLogin} />
+      <HomePage user={user} />
     </div>
   );
 }

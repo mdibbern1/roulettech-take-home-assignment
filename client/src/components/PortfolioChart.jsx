@@ -3,30 +3,28 @@ import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import axios from 'axios';
 
-const PriceChart = (props) => {
+const PortfolioChart = (props) => {
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null);
 
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        if(props.data){
-            setData(props.data);
-        }
-        else{
-            const now = Math.floor(Date.now() / 1000);
-            const vs_currency = 'usd';
-            const from = now - (7 * 24 * 60 * 60);
-            const to = now;
-            const url = `https://api.coingecko.com/api/v3/coins/${props.selectedCoin.toLowerCase()}/market_chart/range?vs_currency=${vs_currency}&from=${from}&to=${to}`;
-            axios.get(url, {}).then((response) => {
-                if(response.status === 200){
-                    setData(response.data.prices);
-                }
-            }).catch((error) => {
+        const quantity = props.userCoins.find(c => c.name.toLowerCase() === props.selectedCoin.toLowerCase()).quantity;
+        const now = Math.floor(Date.now() / 1000);
+        const vs_currency = 'usd';
+        const from = now - (7 * 24 * 60 * 60);
+        const to = now;
+        const url = `https://api.coingecko.com/api/v3/coins/${props.selectedCoin.toLowerCase()}/market_chart/range?vs_currency=${vs_currency}&from=${from}&to=${to}`;
+        axios.get(url, {}).then((response) => {
+            if(response.status === 200){
+                const temp = response.data.prices.map(price => [price[0], price[1] * quantity])
+                console.log('temp: ', temp);
+                setData(temp);
+            }
+        }).catch((error) => {
 
-            });
-        }
+        });
     }, [props.selectedCoin]);
 
     useEffect(() => {
@@ -41,10 +39,10 @@ const PriceChart = (props) => {
             data: {
                 labels: data.map(item => new Date(item[0])),
                 datasets: [{
-                    label: `${props.selectedCoin} Price`,
+                    label: `${props.selectedCoin} Price from Portfolio`,
                     data: data.map(item => item[1]),
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(100, 205, 100, 1)',
+                    backgroundColor: 'rgba(100, 205, 100, 0.2)',
                     fill: true,
                 }]
             },
@@ -61,20 +59,21 @@ const PriceChart = (props) => {
                     }
                 }
             }
-        });
+        })
 
         return () => {
-            if (chartInstanceRef.current) {
+            if(chartInstanceRef.current){
                 chartInstanceRef.current.destroy();
             }
-        };
+        }
+
     }, [data]);
 
     return (
         <div>
             <canvas style={{height: '100px', width: '40px'}} ref={chartRef}></canvas>
         </div>
-    );
+    )
 }
 
-export default PriceChart;
+export default PortfolioChart;
