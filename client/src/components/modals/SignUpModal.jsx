@@ -4,6 +4,13 @@ import axios from "axios";
 const SignUpModal = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedItems, setSelectedItems] = useState([]);
+    const [formData, setFormData] = useState({
+        bitcoin: { checked: false, quantity: '' },
+        ethereum: { checked: false, quantity: '' },
+        cardano: { checked: false, quantity: '' },
+        solana: { checked: false, quantity: '' },
+        polkadot: { checked: false, quantity: '' },
+    });
 
     useEffect(() => {
         setSelectedItems([]);
@@ -34,10 +41,24 @@ const SignUpModal = (props) => {
                 setSelectedItems(selectedItems.map((item) => item.name === name ? { ...item, quantity: +value } : item));
             }
         }
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: {
+                ...prevState[name],
+                checked: type === 'checkbox' ? checked : prevState[name].checked,
+                quantity: type === 'number' ? value : prevState[name].quantity,
+            }
+        }));
     };
 
     const handleSignUp = async (event) => {
         event.preventDefault();
+        for (const coin in formData) {
+            if (formData[coin].checked && !formData[coin].quantity) {
+                alert(`Please enter a quantity for ${coin}`);
+                return;
+            }
+        }
         axios.post('http://127.0.0.1:8000/users/register', {
             email: event.target.email.value,
             password: event.target.password.value,
@@ -66,27 +87,27 @@ const SignUpModal = (props) => {
                             <div>
                                 <input type="checkbox" name="bitcoin" onChange={handleInputChange} />
                                 <label htmlFor="bitcoin">Bitcoin</label>
-                                <input placeholder="Quantity" type="number" id="quantity-bitcoin" name="bitcoin" onChange={handleInputChange} />
+                                <input placeholder="Quantity" type="number" id="quantity-bitcoin" name="bitcoin" onChange={handleInputChange} disabled={!formData.bitcoin.checked} />
                             </div>
                             <div>
                                 <input type="checkbox" name="ethereum" onChange={handleInputChange} />
                                 <label htmlFor="ethereum">ethereum</label>
-                                <input placeholder="Quantity" type="number" id="quantity-ethereum" name="ethereum" onChange={handleInputChange} />
+                                <input placeholder="Quantity" type="number" id="quantity-ethereum" name="ethereum" onChange={handleInputChange} disabled={!formData.ethereum.checked} />
                             </div>
                             <div>
                                 <input type="checkbox" name="cardano" onChange={handleInputChange} />
                                 <label htmlFor="cardano">cardano</label>
-                                <input placeholder="Quantity" type="number" id="quantity-cardano" name="cardano" onChange={handleInputChange} />
+                                <input placeholder="Quantity" type="number" id="quantity-cardano" name="cardano" onChange={handleInputChange} disabled={!formData.cardano.checked} />
                             </div>
                             <div>
                                 <input type="checkbox" name="solana" onChange={handleInputChange} />
                                 <label htmlFor="solana">solana</label>
-                                <input placeholder="Quantity" type="number" id="quantity-solana" name="solana" onChange={handleInputChange} />
+                                <input placeholder="Quantity" type="number" id="quantity-solana" name="solana" onChange={handleInputChange} disabled={!formData.solana.checked} />
                             </div>
                             <div>
                                 <input type="checkbox" name="polkadot" onChange={handleInputChange} />
                                 <label htmlFor="polkadot">polkadot</label>
-                                <input placeholder="Quantity" type="number" id="quantity-polkadot" name="polkadot" onChange={handleInputChange} />
+                                <input placeholder="Quantity" type="number" id="quantity-polkadot" name="polkadot" onChange={handleInputChange} disabled={!formData.polkadot.checked} />
                             </div>
                             <button type="submit">Submit</button>
                             <button type='button' onClick={toggleModal}>Close</button>
